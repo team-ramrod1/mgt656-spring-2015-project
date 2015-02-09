@@ -102,6 +102,10 @@ function rsvp (request, response){
 
 }
 
+function api (request, response){
+  response.send(events.all);
+}
+
 /**
  * Export all our functions (controllers in this case, because they
  * handles requests and render responses).
