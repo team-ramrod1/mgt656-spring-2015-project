@@ -112,7 +112,7 @@ function api (request, response){
       }
     }
   }else{
-    output.events.all;
+    output.events = events.all;
   }
   response.json(output);
 }
