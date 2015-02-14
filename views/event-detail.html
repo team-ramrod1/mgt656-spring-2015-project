@@ -10,5 +10,20 @@
         {% endfor %}
         </ul>
   <p>Want to come to {{event.title}}? Let's get weird!</p>
+  {% if errors %}
+  <div>
+      <ul class="form-errors">
+          {% for errors in errors %}
+          <li>{{error}}</li>
+          {% endfor %}
+      </ul>
+  </div>
+  
+  {% endif %}
+  
   <img src ="{{event.image}}" id="image">
+  <form method="POST">
+      <input type="text" name="email" id="email" placeholder="Your email"/>
+      <input type="submit" value="Submit"/>
+  </form>
 {% endblock %}
