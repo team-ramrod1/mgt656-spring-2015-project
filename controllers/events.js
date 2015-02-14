@@ -87,7 +87,7 @@ function saveEvent(request, response){
   }
   var image = request.body.image;
   if(image.match(/\.(png|gif)$/) === null) {
-    contextData.errors.push('Your image must be a png or gif file.')
+    contextData.errors.push('Your image must be a png or gif file.');
   }
   
   if (contextData.errors.length === 0) {
