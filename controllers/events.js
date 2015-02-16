@@ -2,6 +2,7 @@
 
 var events = require('../models/events');
 var validator = require('validator');
+var lodash = require('lodash');
 
 // Date data that would be useful to you
 // completing the project These data are not
@@ -26,7 +27,9 @@ var allowedDateInfo = {
   hours: [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
     12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23
-  ]
+  ],
+  years: [2015, 2016],
+  days: lodash.range(1, 31)
 };
 
 /**
@@ -45,7 +48,7 @@ function listEvents(request, response) {
  * Controller that renders a page for creating new events.
  */
 function newEvent(request, response){
-  var contextData = {};
+  var contextData = {allowedDateInfo: allowedDateInfo};
   response.render('create-event.html', contextData);
 }
 
@@ -61,18 +64,19 @@ function checkIntRange(request, fieldName, minVal, maxVal, contextData){
 }
 return value;
 }
+
 /**
  * Controller to which new events are submitted.
  * Validates the form and adds the new event to
  * our global list of events.
  */
 function saveEvent(request, response){
-  var contextData = {errors: []};
+  var contextData = {errors: [], allowedDateInfo: allowedDateInfo};
 
   if (validator.isLength(request.body.title, 5, 50) === false) {
     contextData.errors.push('Your title should be between 5 and 100 letters.');
   }
-  
+
   var year = checkIntRange(request, 'year', 2015, 2016, contextData);
   var month = checkIntRange(request, 'month', 0, 11, contextData);
   var day = checkIntRange(request, 'day', 1, 31, contextData);
@@ -92,6 +96,7 @@ function saveEvent(request, response){
   
   if (contextData.errors.length === 0) {
     var newEvent = {
+      id: events.getMaxId() + 1,
       title: request.body.title,
       location: request.body.location,
       image: request.body.image,
@@ -99,7 +104,7 @@ function saveEvent(request, response){
       attending: []
     };
     events.all.push(newEvent);
-    response.redirect('/events');
+    response.redirect('/events/' + newEvent.id);
   }else{
     response.render('create-event.html', contextData);
   }
